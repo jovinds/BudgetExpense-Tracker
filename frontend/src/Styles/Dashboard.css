@@ -16,17 +16,27 @@
 
 .dashboard-container {
   justify-content: center;
-  background-color: rgb(255, 255, 255);
-  margin: 40px 90px 40px 90px;
-  height: 100vh;
+  background-color: #0d1b2a;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-contents {
+  margin: 0px 90px 40px 90px;
+  padding-top: 20px;
 }
 
 .profile-container {
-  background-color: rgb(201, 238, 251);
+  background-color: #283958;
   border-radius: 24px;
+  color: white;
 }
 
 .exp-distribution-container {
-  background-color: rgb(201, 238, 251);
+  background-color: #283958;
   border-radius: 24px;
+  color: white;
 }

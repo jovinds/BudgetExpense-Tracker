@@ -84,9 +84,6 @@ function Dashboard() {
         }
         const Categoriesdata = await responsAllCategories.json();
         const Expensesdata = await responseAllExpenses.json();
-        console.log("categories" + Categoriesdata);
-        console.log("expenses" + Expensesdata);
-
         const totalBudget = await Categoriesdata.reduce((total, cat) => {
           return (total += cat.Budget);
         }, 0);
@@ -98,7 +95,7 @@ function Dashboard() {
         const budgetExpensePercent = (totalExpense / totalBudget) * 100;
 
         // Create chart data
-        const chartData = Categoriesdata.map((category) => {
+        const chartData = Categoriesdata.map((category, index) => {
           // Filter expenses that belong to this category
           const categoryExpenses = Expensesdata.filter(
             (expense) => expense.CategoryID === category._id
@@ -114,14 +111,12 @@ function Dashboard() {
           const percentage = (categoryTotalExpense / totalExpense) * 100;
 
           // Generate a random color for the category
-          const randomColor = `#${Math.floor(Math.random() * 16777215).toString(
-            16
-          )}`;
+          const color = colors[index].color;
 
           return {
             name: category.CategoryName,
             value: percentage,
-            color: randomColor,
+            color: color,
           };
         });
         setChartData(chartData);
@@ -313,17 +308,6 @@ function Dashboard() {
     }
   };
 
-  // for expense distribution
-  const data = [
-    { name: "Housing", value: 35, color: "#0088FE" },
-    { name: "Transportation", value: 20, color: "#00C49F" },
-    { name: "Food", value: 15, color: "#FFBB28" },
-    { name: "Utilities", value: 10, color: "#FF8042" },
-    { name: "Entertainment", value: 10, color: "#8884D8" },
-    { name: "Miscellaneous", value: 10, color: "#FF6384" },
-    { name: "Miscellaneous", value: 10, color: "#FF6384" },
-  ];
-
   // for selection of categories
   const categoryOptions = [
     { value: "Housing", label: "Housing" },
@@ -335,23 +319,44 @@ function Dashboard() {
     { value: "Water", label: "Water" },
   ];
 
+  const colors = [
+    { color: "#FF0000" },
+    { color: "#0000FF" },
+    { color: "#FF7F00" },
+    { color: "#00FF00" },
+    { color: "#800080" },
+    { color: "#008000" },
+    { color: "#800000" },
+    { color: "#0066CC" },
+    { color: "#FF6347" },
+    { color: "#FFD700" },
+    { color: "#A52A2A" },
+    { color: "#D2691E" },
+    { color: "#C71585" },
+    { color: "#FF1493" },
+    { color: "#2E8B57" },
+    { color: "#B22222" },
+    { color: "#708090" },
+    { color: "#483D8B" },
+    { color: "#8B0000" },
+  ];
+
   return (
-    <Container className="dashboard-container">
-      <div>
-        <Row>
-          {/* profile */}
-          <Col className="profile-container me-3" style={{ maxWidth: "400px" }}>
+    <div className="dashboard-container">
+      <div className="dashboard-contents">
+        {/* Row for Profile and Expense Distribution */}
+        <Row className="g-3">
+          {/* Column container for the profile and expense vs budget */}
+          <Col className="profile-container m-2" style={{ Width: "100%" }}>
             <div>
               <h1>{`${firstName} ${lastName}`}</h1>
-            </div>
-            <div>
-              <h3>Febuary</h3>
             </div>
             <div className="expense-vs-budget">
               <h3>Expense</h3>
               <h3>|</h3>
               <h3>Budget</h3>
             </div>
+            {/* Progress bar of overall Expense to the overall set Budget */}
             <ProgressBar
               animated
               now={budgetExpensePercent}
@@ -364,7 +369,7 @@ function Dashboard() {
             </div>
           </Col>
           {/* expense distribution */}
-          <Col className="exp-distribution-container">
+          <Col className="exp-distribution-container m-2">
             <h2 className="text-xl font-bold mb-4 d-flex justify-content-center align-items-center">
               Expense Distribution
             </h2>
@@ -382,7 +387,7 @@ function Dashboard() {
                     `${name}: ${(percent * 100).toFixed(0)}%`
                   }
                 >
-                  {data.map((entry) => (
+                  {chartData.map((entry) => (
                     <Cell key={entry.name} fill={entry.color} />
                   ))}
                 </Pie>
@@ -395,9 +400,10 @@ function Dashboard() {
         <Row
           className="text-xl font-bold mb-4 d-flex justify-content-center align-items-center"
           style={{
-            backgroundColor: "lightblue",
+            backgroundColor: "#283958",
             minHeight: "365px",
             borderRadius: "24px",
+            color: "white",
           }}
         >
           {createCategoryWindow && (
@@ -414,7 +420,7 @@ function Dashboard() {
               }}
             >
               <Form onSubmit={handleSubmitCreateCategory}>
-                <Modal.Dialog style={{ top: "20%" }}>
+                <Modal.Dialog style={{ top: "20%", color: "black" }}>
                   <Modal.Header>
                     <Modal.Title>Create new Category</Modal.Title>
                   </Modal.Header>
@@ -481,7 +487,7 @@ function Dashboard() {
                 backdropFilter: "blur(4px)",
               }}
             >
-              <Modal.Dialog>
+              <Modal.Dialog style={{ color: "black" }}>
                 <Modal.Header
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
@@ -661,7 +667,7 @@ function Dashboard() {
             <button
               style={{
                 display: "block",
-                backgroundColor: "rgb(16, 217, 63)",
+                backgroundColor: "rgb(41, 147, 67)",
                 border: "none",
                 padding: "5px 20px",
                 fontWeight: "500",
@@ -714,7 +720,7 @@ function Dashboard() {
           )}
         </Row>
       </div>
-    </Container>
+    </div>
   );
 }
 export default Dashboard;

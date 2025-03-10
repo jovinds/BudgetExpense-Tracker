@@ -9,6 +9,8 @@ const {
   deleteExpenseByCategoryId,
 } = require("../controllers/expenses");
 
+const { authMiddleware } = require("../middleware/authMiddleWare");
+
 router.post("/:categoryId", createExpense);
 router.get("/category/:categoryId", getExpensesCategoyId);
 router.get("/:userId", getExpensesUserId);
